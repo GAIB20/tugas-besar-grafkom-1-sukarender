@@ -14,16 +14,38 @@
     <body>
         <div class="wrapper">
             <div class="container">
-                <div class="opt-title">Structure</div>
-                <div class="opt-shapes" id="opt-shapes"></div>
+                <div class="opt_title">Structure</div>
+                <div class="opt_shapes" id="opt_shapes"></div>
             </div>
             <canvas class="panel" id="panel">
                 
             </canvas>
             <div class="opt">
-                <div class="opt-title">Model</div>
-   
-            </div>
+                <div class="opt_title">Model</div>
+                <div class="model_bt">
+                    <button class="opt-model-bt-line" id="opt-model-bt-line" onclick="chosenModel('line')">Line</button>
+                    <button class="opt-model-bt-square" id="opt-model-bt-square" onclick="chosenModel('square')">Square</button>
+                    <button class="opt-model-bt-rectangle" id="opt-model-bt-rectangle" onclick="chosenModel('rectangle')">Rectangle</button>
+                    <button class="opt-model-bt-polygon" id="opt-model-bt-polygon" onclick="chosenModel('polygon')">Polygon</button>
+                </div>
+                <div class="transformation_title">Transformation</div>
+                <div class="transformation_container">
+                    <label for="rectangle">Scale X:</label>
+                    <input type="range" id="sliderX" oninput="inputSliderX()">
+                    <label for="rectangle">Scale Y:</label>
+                    <input type="range" id="sliderY" oninput="inputSliderY()">
+                    <label for="rectangle">Rotation:</label>
+                    <input type="range" id="sliderR" oninput="inputSliderR()">
+                </div>
+                <div class="color_title">Color</div>
+                <div class="color_container">
+                    <div class="opt-color-in">
+                        <input type="color" class="color" id="color" value="#ff0000" />
+                        <button class="opt-color-bt" id="opt-color-bt"  >Color</button>
+                    </div>
+                </div>
+                   
+
         </div>
     </body>
     <script src="./main.js"></script>
