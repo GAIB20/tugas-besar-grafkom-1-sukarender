@@ -112,3 +112,49 @@ function editShapes() {
     redrawShape(0)
     yBefore = yVal;
 }
+
+function rotateShape() {
+    const angle = parseInt(document.getElementById('sliderR').value)*-1; // Get the slider value
+
+    // Rotate by the angle degrees
+    const vertices = shapes[0].verticesList;
+
+    // Calculate the center of the shape
+    const center = [
+        vertices.reduce((sum, vertex) => sum + vertex[0], 0) / vertices.length,
+        vertices.reduce((sum, vertex) => sum + vertex[1], 0) / vertices.length
+    ];
+
+    // Convert angle to radians
+    const angleRadians = (angle * Math.PI) / 180;
+    console.log(angleRadians);
+
+    // Rotate each vertex around the center
+    const rotatedVertices = vertices.map(vertex => {
+        const x = vertex[0];
+        const y = vertex[1];
+
+        // Translate the vertex relative to the center
+        const translatedX = x - center[0];
+        const translatedY = y - center[1];
+
+        // Rotate the translated vertex
+        const rotatedX = translatedX * Math.cos(angleRadians) - translatedY * Math.sin(angleRadians);
+        const rotatedY = translatedX * Math.sin(angleRadians) + translatedY * Math.cos(angleRadians);
+
+        // Translate the rotated vertex back
+        const finalX = rotatedX + center[0];
+        const finalY = rotatedY + center[1];
+
+        return [finalX, finalY];
+    });
+
+    // Update vertices with rotated vertices
+    temp=shapes[0].verticesList;
+    shapes[0].verticesList = rotatedVertices;
+
+    // Redraw the shape
+    redrawShape(0);
+    shapes[0].verticesList = temp;
+}
+
