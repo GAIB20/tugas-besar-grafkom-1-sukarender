@@ -80,6 +80,11 @@ function redrawShape(shapeIndex, color) {
     displayShapes();
 }
 
+function redrawAllShapes() {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    shapes.forEach((shape, index) => redrawShape(index));
+}
+
 window.onload = function() {
     const sliderX = document.getElementById('sliderX');
     sliderX.value = 0; 

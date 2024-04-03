@@ -1,3 +1,9 @@
+let selectedShapeIndex = null;
+let selectedVertexIndex = null;
+let selectedVertices = [];
+
+const colorPicker = document.getElementById('color-picker');
+
 function hexToRgb(hex) {
     hex = hex.replace('#', '');
     return [
@@ -73,9 +79,14 @@ function displayShape(arrayShape) {
             vertexDiv.appendChild(vertexLabel);
 
             vertexCheckbox.addEventListener('change', () => {
-                console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} ${vertexCheckbox.checked ? 'selected' : 'deselected'}`);
-                console.log(`Coordinate: (${vertex[0]}, ${vertex[1]})`);
-                console.log(`Color: (${shape.fragColorList[vertexIndex][0]}, ${shape.fragColorList[vertexIndex][1]}, ${shape.fragColorList[vertexIndex][2]}, ${shape.fragColorList[vertexIndex][3]})`);
+                if (vertexCheckbox.checked) {
+                    selectedShapeIndex = shapeIndex;
+                    selectedVertexIndex = vertexIndex;
+                    console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} selected`);
+                } else {
+                    selectedShapeIndex = null;
+                    selectedVertexIndex = null;
+                }
             });
         });
 
@@ -84,7 +95,19 @@ function displayShape(arrayShape) {
             shape.verticesList.forEach((_, vertexIndex) => {
                 console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} clicked`);
                 console.log(`Coordinate: (${shape.verticesList[vertexIndex][0]}, ${shape.verticesList[vertexIndex][1]})`);
+                const vertexCheckbox = document.getElementById(`vertex-${shapeIndex}-${vertexIndex}`);
+                vertexCheckbox.checked = true;
             });
         });
     });
 }
+
+colorPicker.addEventListener('input', function() {
+    const pickedColor = colorPicker.value; 
+    const rgbaColor = hexToRgb(pickedColor);
+    if (selectedShapeIndex !== null && selectedVertexIndex !== null) {
+        shapes[selectedShapeIndex].fragColorList[selectedVertexIndex] = rgbaColor;
+        redrawAllShapes();
+    }
+});
+
