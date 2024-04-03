@@ -31,6 +31,7 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
 
     vertices = verticesList.flat();
     fragColor = fragColorList.flat();
+    console.log(vertices);
     var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
     gl.drawArrays(primitiveType, 0, vertices.length / 2);
     storeShape(verticesList, shapeType, fragColorList);

@@ -73,10 +73,23 @@ function handleMouseMove(event){
     n=shapes.length-1;
     temp=shapes[n];
     // change the endx and endy of the last shape in the shapes array
-    temp.verticesList[1][0]=endX / canvas.width * 2 - 1;
-    temp.verticesList[1][1]=1 - endY / canvas.height * 2;
-    shapes[n]=temp;
-    redrawShape(n);
+    if (currentShapeType === "line") {
+        temp.verticesList[1][0]=endX / canvas.width * 2 - 1;
+        temp.verticesList[1][1]=1 - endY / canvas.height * 2;
+        shapes[n]=temp;
+        redrawShape(n);
+        return;
+    }
+    else if (currentShapeType === "rectangle"){
+        temp.verticesList[3][0]=endX / canvas.width * 2 - 1;
+        temp.verticesList[3][1]=1 - endY / canvas.height * 2;
+        temp.verticesList[1][0]=endX / canvas.width * 2 - 1;
+        temp.verticesList[2][1]=1 - endY / canvas.height * 2;
+        shapes[n]=temp;
+        redrawShape(n);
+        return;
+    
+    }
 }
 
 function handleMouseUp(event, shapeType){
