@@ -15,9 +15,53 @@ function handleMouseDown(event){
     endY = event.offsetY+1;
     if (currentShapeType === "line") {
         drawShape(gl, startX, startY, endX, endY, "line");
-    } else if (currentShapeType === "square") {
-        drawShape(gl, startX, startY, 80, 80, "square");
-    } else if (currentShapeType === "rectangle") {
+    } 
+    else if (currentShapeType === "square") {
+        let sigmaX = endX - startX;
+        let sigmaY = endY - startY;
+        
+        if(Math.abs(sigmaX) > Math.abs(sigmaY)){
+            if(sigmaX > 0){
+                if(sigmaY > 0){
+                    endY = endX;
+                }
+                else{
+                    endY = endX * -1;
+                }
+            }
+            else{
+                if(sigmaY > 0){
+                    endY = endX * -1;
+                }
+                else{
+                    endY = endX;
+                }
+            }
+        }
+        
+        else{
+            if(sigmaX > 0){
+                if(sigmaY > 0){
+                    endX = endY;
+                }
+                else{
+                    endX = endY * -1;
+                }
+            }
+            else{
+                if(sigmaY > 0){
+                    endX = endY * -1;
+                }
+                else{
+                    endX = endY;
+                }
+            }
+        }
+        
+        drawShape(gl, startX, startY, endX, endY, "square");
+    } 
+
+    else if (currentShapeType === "rectangle") {
         drawShape(gl, startX, startY, endX, endY, "rectangle");
     }
 }
