@@ -70,3 +70,22 @@ html {
   height: 100%;
   
 }
+
+.shape-div{
+  display: flex;
+  flex-direction: column;
+}
+
+.vertex-div{
+  display: flex;
+  flex-direction: row;
+
+}
+.btn-shape {
+  display: block;
+}
+
+.btn-vertex {
+  display: block;
+  margin-left: 15px;
+}

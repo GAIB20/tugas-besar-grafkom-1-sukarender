@@ -35,6 +35,7 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
     gl.drawArrays(primitiveType, 0, vertices.length / 2);
     storeShape(verticesList, shapeType, fragColorList);
     console.log(shapes);
+    displayShape(shapes);
     redrawShape(shapes.length - 1);
 }
 
@@ -76,6 +77,7 @@ function redrawShape(shapeIndex, color) {
 
         gl.drawArrays(primitiveType, 0, vertices.length / 2);
     });
+    displayShapes();
 }
 
 window.onload = function() {
