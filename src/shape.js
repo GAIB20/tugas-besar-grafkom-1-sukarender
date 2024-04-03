@@ -8,3 +8,8 @@ lineButton.addEventListener('click', function() {
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event));
     canvas.addEventListener('mouseup', (event) => handleMouseUp(event, "line"));
 });
+
+
+// sliderX.addEventListener('input', function()){
+
+// }

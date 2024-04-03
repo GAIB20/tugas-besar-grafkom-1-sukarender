@@ -3,6 +3,8 @@ const squareButton = document.getElementById('square');
 const rectangleButton = document.getElementById('rect');
 const polygonButton = document.getElementById('poly');
 
+const sliderX = document.getElementById('sliderX');
+
 
 var isDrawing = false;
 var startX, startY, endX, endY;

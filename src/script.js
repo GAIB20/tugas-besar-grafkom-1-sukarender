@@ -1,3 +1,6 @@
+let xBefore = 0;
+let yBefore = 0;
+
 function drawShape(gl, startX, startY, endX, endY, shapeType) {
     var vertices = [];
     var fragColorList = [ [1.0, 0.0, 0.0, 1.0], 
@@ -73,4 +76,39 @@ function redrawShape(shapeIndex, color) {
 
         gl.drawArrays(primitiveType, 0, vertices.length / 2);
     });
+}
+
+window.onload = function() {
+    const sliderX = document.getElementById('sliderX');
+    sliderX.value = 0; 
+    sliderX.min = -1;
+    sliderX.max = 1;
+    sliderX.step = 0.01;
+
+    const sliderY = document.getElementById('sliderY');
+    sliderY.value = 0;
+    sliderY.min = -1;
+    sliderY.max = 1;
+    sliderY.step = 0.01;
+};
+
+function editShapes() {
+
+    // Transformation X
+    const sliderX = document.getElementById('sliderX');
+    let xVal = parseFloat(sliderX.value);
+    shapes[0].verticesList.forEach(vertex => {
+        vertex[0] += xVal - xBefore;
+    });
+    redrawShape(0)
+    xBefore = xVal;
+
+    // Transformation Y
+    const sliderY = document.getElementById('sliderY');
+    let yVal = parseFloat(sliderY.value);
+    shapes[0].verticesList.forEach(vertex => {
+        vertex[1] -= yVal - yBefore;
+    });
+    redrawShape(0)
+    yBefore = yVal;
 }
