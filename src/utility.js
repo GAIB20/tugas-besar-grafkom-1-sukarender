@@ -187,13 +187,28 @@ function displayShape(arrayShape) {
         });
 
         shapeButton.addEventListener('click', () => {
+            // check if shape index is in vertices list
             console.log(`Shape ${shapeIndex + 1} clicked`);
-            shape.verticesList.forEach((_, vertexIndex) => {
-                console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} clicked`);
-                console.log(`Coordinate: (${shape.verticesList[vertexIndex][0]}, ${shape.verticesList[vertexIndex][1]})`);
-                const vertexCheckbox = document.getElementById(`vertex-${shapeIndex}-${vertexIndex}`);
-                vertexCheckbox.checked = true;
-            });
+            if (selectedVertices[shapeIndex]) {
+                selectedVertices[shapeIndex].forEach(vertexIndex => {
+                    const vertexCheckbox = document.getElementById(`vertex-${shapeIndex}-${vertexIndex}`);
+                    vertexCheckbox.checked = false;
+                });
+                delete selectedVertices[shapeIndex];
+            }
+            else {
+                shape.verticesList.forEach((_, vertexIndex) => {
+                    console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} clicked`);
+                    console.log(`Coordinate: (${shape.verticesList[vertexIndex][0]}, ${shape.verticesList[vertexIndex][1]})`);
+                    const vertexCheckbox = document.getElementById(`vertex-${shapeIndex}-${vertexIndex}`);
+                    vertexCheckbox.checked = true;
+                    if (!selectedVertices[shapeIndex]) {
+                        selectedVertices[shapeIndex] = [];
+                    }
+                    selectedVertices[shapeIndex].push(vertexIndex);
+                });
+            }
+            console.log(selectedVertices);
         });
     });
 }
