@@ -36,6 +36,9 @@
                     <input type="range" id="sliderY" oninput="editShapes()">
                     <label for="rectangle">Rotation:</label>
                     <input type="range" id="sliderR" min="-180" max="180" value="0" oninput="rotateShape()">
+                    <!-- create a save button -->
+                    <button class="opt-model-bt-save" id="save" onclick="saveJson()">Save</button>
+                    <button class="opt-model-bt-load" id="load" onclick="loadJson()">Load</button>
                 </div>
                 <div class="color_title">Color</div>
                 <div class="color_container">

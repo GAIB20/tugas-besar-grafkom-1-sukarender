@@ -214,5 +214,28 @@ colorPicker.addEventListener('input', function() {
 
     redrawAllShapes();
 });
+function saveJson(){
+    var json = JSON.stringify(shapes);
+    var blob = new Blob([json], {type: "application/json"});
+    var url  = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.download    = "shapes.json";
+    a.href        = url;
+    a.click();
+}
 
-
+function loadJson(){
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e => { 
+        var file = e.target.files[0]; 
+        var reader = new FileReader();
+        reader.readAsText(file,'UTF-8');
+        reader.onload = readerEvent => {
+            var content = readerEvent.target.result;
+            shapes = JSON.parse(content);
+            redrawAllShapes();
+        }
+    }
+    input.click();
+}
