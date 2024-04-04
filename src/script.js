@@ -105,33 +105,75 @@ function editShapes() {
 
     // Transformation X
     const sliderX = document.getElementById('sliderX');
-    let xVal = parseFloat(sliderX.value);
-
-    selectedVertices.forEach(( listIndex, indexShape ) => {
-
-        if(listIndex.length == 4){
-            shapes[indexShape].verticesList.forEach(vertex => {
-                vertex[0] += xVal - xBefore
-            })
-            redrawShape(indexShape)
-        }
-    });
-    xBefore = xVal;
-
-
-    // Transformation Y
     const sliderY = document.getElementById('sliderY');
+
+    let xVal = parseFloat(sliderX.value);
     let yVal = parseFloat(sliderY.value);
 
-    selectedVertices.forEach(( listIndex, indexShape ) => {
 
-        if(listIndex.length == 4){
+    // // check how many of the selected shapes are empty
+    // let count = 0;
+    // selectedVertices.forEach(( listIndex, indexShape ) => {
+    //     if(listIndex.length < 1 ){
+    //         count++;
+    //     }
+    // });
+
+    selectedVertices.forEach(( listIndex, indexShape ) => {
+        if(listIndex.length > 1 ){
             shapes[indexShape].verticesList.forEach(vertex => {
+                vertex[0] += xVal - xBefore
                 vertex[1] -= yVal - yBefore
             })
             redrawShape(indexShape)
         }
+        else if(listIndex.length == 1){
+            // check the shape type
+            if(shapes[indexShape].shapeType == "line"){
+                if(listIndex[0] == 0){
+                    shapes[indexShape].verticesList[0][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[0][1] -= yVal - yBefore
+                }
+                else if(listIndex[0] == 1){
+                    shapes[indexShape].verticesList[1][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[1][1] -= yVal - yBefore
+                }
+            }
+            // check if the shape is a square
+            if(shapes[indexShape].shapeType == "square"){}
+
+            // check if the shape is a rectangle
+            if(shapes[indexShape].shapeType == "rectangle"){
+                if(listIndex[0] == 0){
+                    shapes[indexShape].verticesList[0][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[0][1] -= yVal - yBefore
+                    shapes[indexShape].verticesList[1][1] = shapes[indexShape].verticesList[0][1]
+                    shapes[indexShape].verticesList[2][0] = shapes[indexShape].verticesList[0][0]
+                    
+                }
+                else if(listIndex[0] == 1){
+                    shapes[indexShape].verticesList[1][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[1][1] -= yVal - yBefore
+                    shapes[indexShape].verticesList[0][1] = shapes[indexShape].verticesList[1][1]
+                    shapes[indexShape].verticesList[3][0] = shapes[indexShape].verticesList[1][0]
+                }
+                else if(listIndex[0] == 2){
+                    shapes[indexShape].verticesList[2][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[2][1] -= yVal - yBefore
+                    shapes[indexShape].verticesList[0][0] = shapes[indexShape].verticesList[2][0]
+                    shapes[indexShape].verticesList[3][1] = shapes[indexShape].verticesList[2][1]
+                }
+                else if(listIndex[0] == 3){
+                    shapes[indexShape].verticesList[3][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[3][1] -= yVal - yBefore
+                    shapes[indexShape].verticesList[1][0] = shapes[indexShape].verticesList[3][0]
+                    shapes[indexShape].verticesList[2][1] = shapes[indexShape].verticesList[3][1]
+                }
+            }
+            redrawShape(indexShape)
+        }
     });
+    xBefore = xVal;
     yBefore = yVal;
 }
 
