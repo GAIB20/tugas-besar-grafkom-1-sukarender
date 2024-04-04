@@ -1,6 +1,7 @@
 let xBefore = 0;
 let yBefore = 0;
 let count = 0;
+let scaleBefore = 1;
 
 function drawShape(gl, startX, startY, endX, endY, shapeType) {
     var vertices = [];
@@ -254,4 +255,27 @@ function rotateShape() {
         // Restore the original vertices list
         shapes[shapeIndex].verticesList = temp;
     });
+}
+
+function dilatationShape(){
+
+    const sliderD = document.getElementById('sliderD');
+    let dVal = parseFloat(sliderD.value);
+    // console.log(dVal)
+
+    selectedVertices.forEach(( listIndex, indexShape) => {
+        
+        const vertices = shapes[indexShape].verticesList;
+        const center = [
+            vertices.reduce((sum, vertex) => sum + vertex[0], 0) / vertices.length,
+            vertices.reduce((sum, vertex) => sum + vertex[1], 0) / vertices.length
+        ];
+
+        shapes[indexShape].verticesList.forEach(vertex => {
+            vertex[0] = center[0] + ((vertex[0] - center[0]) * dVal) / scaleBefore;
+            vertex[1] = center[1] + ((vertex[1] - center[1]) * dVal) / scaleBefore;
+        });
+        redrawShape(indexShape);
+    })
+    scaleBefore = dVal;
 }
