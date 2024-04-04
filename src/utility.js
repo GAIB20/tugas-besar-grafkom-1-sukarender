@@ -157,15 +157,33 @@ function displayShape(arrayShape) {
             vertexLabel.textContent = `Vertex ${vertexIndex + 1}`;
             vertexDiv.appendChild(vertexLabel);
 
+            // vertexCheckbox.addEventListener('change', () => {
+            //     if (vertexCheckbox.checked) {
+            //         selectedVertices.push({ shapeIndex, vertexIndex });
+            //         console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} selected`);
+            //     } else {
+            //         selectedVertices = selectedVertices.filter(vertex => vertex.shapeIndex !== shapeIndex || vertex.vertexIndex !== vertexIndex);
+            //     }
+            //     console.log(selectedVertices);
+            // });
             vertexCheckbox.addEventListener('change', () => {
                 if (vertexCheckbox.checked) {
-                    selectedVertices.push({ shapeIndex, vertexIndex });
-                    console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} selected`);
+                    if (!selectedVertices[shapeIndex]) {
+                        selectedVertices[shapeIndex] = [];
+                    }
+                    selectedVertices[shapeIndex].push(vertexIndex);
                 } else {
-                    selectedVertices = selectedVertices.filter(vertex => vertex.shapeIndex !== shapeIndex || vertex.vertexIndex !== vertexIndex);
+                    if (selectedVertices[shapeIndex]) {
+                        selectedVertices[shapeIndex] = selectedVertices[shapeIndex].filter(index => index !== vertexIndex);
+                        if (selectedVertices[shapeIndex].length === 0) {
+                            delete selectedVertices[shapeIndex];
+                        }
+                    }
                 }
                 console.log(selectedVertices);
+                
             });
+
         });
 
         shapeButton.addEventListener('click', () => {
@@ -184,10 +202,17 @@ colorPicker.addEventListener('input', function() {
     const pickedColor = colorPicker.value; 
     const rgbaColor = hexToRgb(pickedColor);
 
-    selectedVertices.forEach(({ shapeIndex, vertexIndex }) => {
-        shapes[shapeIndex].fragColorList[vertexIndex] = rgbaColor;
+    selectedVertices.forEach((vertexIndices, shapeIndex) => {
+        if (vertexIndices) {
+            console.log(`Shape ${shapeIndex + 1} length of checked vertices is ${vertexIndices.length}`);
+            vertexIndices.forEach(vertexIndex => {
+                shapes[shapeIndex].fragColorList[vertexIndex] = rgbaColor;
+            });
+        }
     });
+
 
     redrawAllShapes();
 });
+
 
