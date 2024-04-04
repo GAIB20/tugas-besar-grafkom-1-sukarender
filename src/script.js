@@ -123,47 +123,51 @@ function editShapes() {
 }
 
 function rotateShape() {
-    const angle = parseInt(document.getElementById('sliderR').value)*-1; // Get the slider value
+    const angle = parseInt(document.getElementById('sliderR').value) * -1; // Get the slider value
 
-    // Rotate by the angle degrees
-    const vertices = shapes[0].verticesList;
+    // Iterate over each shape
+    selectedVertices.forEach((shape, shapeIndex) => {
+        // Get the vertices of the shape
+        const vertices = shapes[shapeIndex].verticesList;
+        console.log(vertices);
+        // Calculate the center of the shape
+        const center = [
+            vertices.reduce((sum, vertex) => sum + vertex[0], 0) / vertices.length,
+            vertices.reduce((sum, vertex) => sum + vertex[1], 0) / vertices.length
+        ];
 
-    // Calculate the center of the shape
-    const center = [
-        vertices.reduce((sum, vertex) => sum + vertex[0], 0) / vertices.length,
-        vertices.reduce((sum, vertex) => sum + vertex[1], 0) / vertices.length
-    ];
+        // Convert angle to radians
+        const angleRadians = (angle * Math.PI) / 180;
 
-    // Convert angle to radians
-    const angleRadians = (angle * Math.PI) / 180;
-    console.log(angleRadians);
+        // Rotate each vertex around the center
+        const rotatedVertices = vertices.map(vertex => {
+            const x = vertex[0];
+            const y = vertex[1];
 
-    // Rotate each vertex around the center
-    const rotatedVertices = vertices.map(vertex => {
-        const x = vertex[0];
-        const y = vertex[1];
+            // Translate the vertex relative to the center
+            const translatedX = x - center[0];
+            const translatedY = y - center[1];
 
-        // Translate the vertex relative to the center
-        const translatedX = x - center[0];
-        const translatedY = y - center[1];
+            // Rotate the translated vertex
+            const rotatedX = translatedX * Math.cos(angleRadians) - translatedY * Math.sin(angleRadians);
+            const rotatedY = translatedX * Math.sin(angleRadians) + translatedY * Math.cos(angleRadians);
 
-        // Rotate the translated vertex
-        const rotatedX = translatedX * Math.cos(angleRadians) - translatedY * Math.sin(angleRadians);
-        const rotatedY = translatedX * Math.sin(angleRadians) + translatedY * Math.cos(angleRadians);
+            // Translate the rotated vertex back
+            const finalX = rotatedX + center[0];
+            const finalY = rotatedY + center[1];
 
-        // Translate the rotated vertex back
-        const finalX = rotatedX + center[0];
-        const finalY = rotatedY + center[1];
+            return [finalX, finalY];
+        });
 
-        return [finalX, finalY];
+        // Update vertices with rotated vertices
+        temp = shapes[shapeIndex].verticesList;
+        shapes[shapeIndex].verticesList = rotatedVertices;
+        console.log(shapeIndex);
+
+        // Redraw the shape
+        redrawShape(shapeIndex);
+
+        // Restore the original vertices list
+        shapes[shapeIndex].verticesList = temp;
     });
-
-    // Update vertices with rotated vertices
-    temp=shapes[0].verticesList;
-    shapes[0].verticesList = rotatedVertices;
-
-    // Redraw the shape
-    redrawShape(0);
-    shapes[0].verticesList = temp;
 }
-

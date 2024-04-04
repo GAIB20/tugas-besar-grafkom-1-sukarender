@@ -150,6 +150,10 @@ function displayShape(arrayShape) {
             vertexCheckbox.type = 'checkbox';
             vertexCheckbox.id = `vertex-${shapeIndex}-${vertexIndex}`;
             vertexCheckbox.className = 'btn-vertex';
+            // check if vertex is in selectedVertices
+            if (selectedVertices[shapeIndex] && selectedVertices[shapeIndex].includes(vertexIndex)) {
+                vertexCheckbox.checked = true;
+            }
             vertexDiv.appendChild(vertexCheckbox);
         
             const vertexLabel = document.createElement('label');
