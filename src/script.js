@@ -140,8 +140,37 @@ function editShapes() {
                 }
             }
             // check if the shape is a square
-            if(shapes[indexShape].shapeType == "square"){}
-
+            if(shapes[indexShape].shapeType == "square"){
+                if(listIndex[0] == 0){
+                    shapes[indexShape].verticesList[0][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[0][1] -= xVal - xBefore
+                    shapes[indexShape].verticesList[1][1] = shapes[indexShape].verticesList[0][1]
+                    shapes[indexShape].verticesList[2][0] = shapes[indexShape].verticesList[0][0]
+                    shapes[indexShape].verticesList[3][1] = shapes[indexShape].verticesList[2][1]
+                }
+                else if(listIndex[0] == 1){
+                    shapes[indexShape].verticesList[1][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[1][1] += xVal - xBefore
+                    shapes[indexShape].verticesList[0][1] = shapes[indexShape].verticesList[1][1]
+                    shapes[indexShape].verticesList[3][0] = shapes[indexShape].verticesList[1][0]
+                    shapes[indexShape].verticesList[2][1] = shapes[indexShape].verticesList[3][1]
+                }
+                else if(listIndex[0] == 2){
+                    shapes[indexShape].verticesList[2][0] -= xVal - xBefore
+                    shapes[indexShape].verticesList[2][1] -= xVal - xBefore
+                    shapes[indexShape].verticesList[0][0] = shapes[indexShape].verticesList[2][0]
+                    shapes[indexShape].verticesList[3][1] = shapes[indexShape].verticesList[2][1]
+                    shapes[indexShape].verticesList[1][0] = shapes[indexShape].verticesList[3][0]
+                    shapes[indexShape].verticesList[1][1] = shapes[indexShape].verticesList[0][1]
+                }
+                else if(listIndex[0] == 3){
+                    shapes[indexShape].verticesList[3][0] += xVal - xBefore
+                    shapes[indexShape].verticesList[3][1] -= xVal - xBefore
+                    shapes[indexShape].verticesList[1][0] = shapes[indexShape].verticesList[3][0]
+                    shapes[indexShape].verticesList[2][1] = shapes[indexShape].verticesList[3][1]
+                    shapes[indexShape].verticesList
+                }
+            }
             // check if the shape is a rectangle
             if(shapes[indexShape].shapeType == "rectangle"){
                 if(listIndex[0] == 0){
