@@ -35,7 +35,7 @@
                     <label for="rectangle">Scale Y:</label>
                     <input type="range" id="sliderY" oninput="editShapes()">
                     <label for="rectangle">Rotation:</label>
-                    <input type="range" id="sliderR" oninput="inputSliderR()">
+                    <input type="range" id="sliderR" min="-180" max="180" value="0" oninput="rotateShape()">
                 </div>
                 <div class="color_title">Color</div>
                 <div class="color_container">
