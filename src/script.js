@@ -106,19 +106,32 @@ function editShapes() {
     // Transformation X
     const sliderX = document.getElementById('sliderX');
     let xVal = parseFloat(sliderX.value);
-    shapes[0].verticesList.forEach(vertex => {
-        vertex[0] += xVal - xBefore;
+
+    selectedVertices.forEach(( listIndex, indexShape ) => {
+
+        if(listIndex.length == 4){
+            shapes[indexShape].verticesList.forEach(vertex => {
+                vertex[0] += xVal - xBefore
+            })
+            redrawShape(indexShape)
+        }
     });
-    redrawShape(0)
     xBefore = xVal;
+
 
     // Transformation Y
     const sliderY = document.getElementById('sliderY');
     let yVal = parseFloat(sliderY.value);
-    shapes[0].verticesList.forEach(vertex => {
-        vertex[1] -= yVal - yBefore;
+
+    selectedVertices.forEach(( listIndex, indexShape ) => {
+
+        if(listIndex.length == 4){
+            shapes[indexShape].verticesList.forEach(vertex => {
+                vertex[1] -= yVal - yBefore
+            })
+            redrawShape(indexShape)
+        }
     });
-    redrawShape(0)
     yBefore = yVal;
 }
 
