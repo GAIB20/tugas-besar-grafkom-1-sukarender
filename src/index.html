@@ -13,34 +13,34 @@
     </head>
     <body>
         <div class="wrapper">
-            <div class="container">
+            <div id="container" class="container">
                 <div class="opt_title">Structure</div>
                 <div class="opt_shapes" id="opt_shapes"></div>
             </div>
-            <canvas class="panel" id="panel">
+            <canvas class="panel" id="panel" width="900" height="900">
                 
             </canvas>
             <div class="opt">
                 <div class="opt_title">Model</div>
                 <div class="model_bt">
-                    <button class="opt-model-bt-line" id="opt-model-bt-line" onclick="chosenModel('line')">Line</button>
-                    <button class="opt-model-bt-square" id="opt-model-bt-square" onclick="chosenModel('square')">Square</button>
-                    <button class="opt-model-bt-rectangle" id="opt-model-bt-rectangle" onclick="chosenModel('rectangle')">Rectangle</button>
-                    <button class="opt-model-bt-polygon" id="opt-model-bt-polygon" onclick="chosenModel('polygon')">Polygon</button>
+                    <button class="opt-model-bt-line" id="line">Line</button>
+                    <button class="opt-model-bt-square" id="square">Square</button>
+                    <button class="opt-model-bt-rectangle" id="rect">Rectangle</button>
+                    <button class="opt-model-bt-polygon" id="poly" >Polygon</button>
                 </div>
                 <div class="transformation_title">Transformation</div>
                 <div class="transformation_container">
                     <label for="rectangle">Scale X:</label>
-                    <input type="range" id="sliderX" oninput="inputSliderX()">
+                    <input type="range" id="sliderX" oninput="editShapes()">
                     <label for="rectangle">Scale Y:</label>
-                    <input type="range" id="sliderY" oninput="inputSliderY()">
+                    <input type="range" id="sliderY" oninput="editShapes()">
                     <label for="rectangle">Rotation:</label>
                     <input type="range" id="sliderR" oninput="inputSliderR()">
                 </div>
                 <div class="color_title">Color</div>
                 <div class="color_container">
                     <div class="opt-color-in">
-                        <input type="color" class="color" id="color" value="#ff0000" />
+                        <input type="color" class="color" id="color-picker" value="#ff0000" />
                         <button class="opt-color-bt" id="opt-color-bt"  >Color</button>
                     </div>
                 </div>
@@ -48,10 +48,11 @@
 
         </div>
     </body>
-    <script src="./main.js"></script>
+    <!-- <script src="./main.js"></script> -->
     <script src="./setup.js"></script>
     <script src="./utility.js"></script>
-    <script src="./shapes.js"></script>
-    <script src="./scripts.js"></script>
-    <script src="./convexHull.js"></script>
+    <script src="./shape.js"></script>
+    <script src="./script.js"></script> 
+    <!-- <script src="./convexHull.js"></script> -->
+    <!-- <script src="./test.js"></script> -->
 </html>
