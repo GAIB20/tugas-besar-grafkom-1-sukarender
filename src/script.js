@@ -13,10 +13,10 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
                          [endX / canvas.width * 2 - 1, 1 - endY / canvas.height * 2] ];
         primitiveType = gl.LINES;
     } else if (shapeType === "square"){
-        var verticesList = [ [startX / canvas.width * 2 - 1, 1 - startY / canvas.height * 2], 
-                         [(startX + endX) / canvas.width * 2 - 1, 1 - startY / canvas.height * 2], 
-                         [startX / canvas.width * 2 - 1, 1 - (startY + endY) / canvas.height * 2], 
-                         [(startX + endX) / canvas.width * 2 - 1, 1 - (startY + endY) / canvas.height * 2] ];
+       var verticesList = [[startX / canvas.width * 2 - 1, 1 - startY / canvas.height * 2],
+                            [startX / canvas.width * 2 - 1, 1 - endY / canvas.height * 2],
+                            [endX / canvas.width * 2 - 1, 1 - startY / canvas.height * 2],
+                            [endX / canvas.width * 2 - 1, 1 - endY / canvas.height * 2] ];
         primitiveType = gl.TRIANGLE_STRIP;
     } else if (shapeType === "rectangle"){
         var verticesList = [[startX / canvas.width * 2 - 1, 1 - startY / canvas.height * 2],
