@@ -1,5 +1,6 @@
 let xBefore = 0;
 let yBefore = 0;
+let count = 0;
 
 function drawShape(gl, startX, startY, endX, endY, shapeType) {
     var vertices = [];
@@ -28,7 +29,7 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
         console.error("Invalid shape type");
         return;
     }
-
+    
     vertices = verticesList.flat();
     fragColor = fragColorList.flat();
     console.log(vertices);
@@ -78,6 +79,7 @@ function redrawShape(shapeIndex, color) {
 
         gl.drawArrays(primitiveType, 0, vertices.length / 2);
     });
+
 }
 
 function redrawAllShapes() {
