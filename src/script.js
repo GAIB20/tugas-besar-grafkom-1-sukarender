@@ -78,7 +78,6 @@ function redrawShape(shapeIndex, color) {
 
         gl.drawArrays(primitiveType, 0, vertices.length / 2);
     });
-    displayShapes();
 }
 
 function redrawAllShapes() {

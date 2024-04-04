@@ -183,13 +183,12 @@ function displayShape(arrayShape) {
 
             vertexCheckbox.addEventListener('change', () => {
                 if (vertexCheckbox.checked) {
-                    selectedShapeIndex = shapeIndex;
-                    selectedVertexIndex = vertexIndex;
+                    selectedVertices.push({ shapeIndex, vertexIndex });
                     console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} selected`);
                 } else {
-                    selectedShapeIndex = null;
-                    selectedVertexIndex = null;
+                    selectedVertices = selectedVertices.filter(vertex => vertex.shapeIndex !== shapeIndex || vertex.vertexIndex !== vertexIndex);
                 }
+                console.log(selectedVertices);
             });
         });
 
@@ -208,9 +207,11 @@ function displayShape(arrayShape) {
 colorPicker.addEventListener('input', function() {
     const pickedColor = colorPicker.value; 
     const rgbaColor = hexToRgb(pickedColor);
-    if (selectedShapeIndex !== null && selectedVertexIndex !== null) {
-        shapes[selectedShapeIndex].fragColorList[selectedVertexIndex] = rgbaColor;
-        redrawAllShapes();
-    }
+
+    selectedVertices.forEach(({ shapeIndex, vertexIndex }) => {
+        shapes[shapeIndex].fragColorList[vertexIndex] = rgbaColor;
+    });
+
+    redrawAllShapes();
 });
 
