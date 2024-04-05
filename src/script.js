@@ -146,6 +146,7 @@ function editShapes() {
 
     let xVal = parseFloat(sliderX.value);
     let yVal = parseFloat(sliderY.value);
+    // shapes[indexShape].initialVert = shapes[indexShape].verticesList;
 
 
     // // check how many of the selected shapes are empty
@@ -163,6 +164,7 @@ function editShapes() {
                 vertex[1] -= yVal - yBefore
             })
             redrawShape(indexShape)
+            shapes[indexShape].initialVert = shapes[indexShape].verticesList;
         }
         else if(listIndex.length == 1){
             // check the shape type
@@ -237,6 +239,7 @@ function editShapes() {
                 }
             }
         redrawShape(indexShape)
+        shapes[indexShape].initialVert = shapes[indexShape].verticesList;
     }
     });
     xBefore = xVal;
@@ -249,7 +252,7 @@ function rotateShape() {
     // Iterate over each shape
     selectedVertices.forEach((shape, shapeIndex) => {
         // Get the vertices of the shape
-        const vertices = shapes[shapeIndex].verticesList;
+        const vertices = shapes[shapeIndex].initialVert;
         console.log(vertices);
         // Calculate the center of the shape
         const center = [
@@ -281,19 +284,18 @@ function rotateShape() {
         });
 
         // Update vertices with rotated vertices
-        temp = shapes[shapeIndex].verticesList;
         shapes[shapeIndex].verticesList = rotatedVertices;
         console.log(shapeIndex);
 
         // Redraw the shape
         redrawShape(shapeIndex);
 
-        // Restore the original vertices list
-        shapes[shapeIndex].verticesList = temp;
     });
 }
 
 function dilatationShape(){
+
+    // shapes[indexShape].initialVert = shapes[indexShape].verticesList;
 
     const sliderD = document.getElementById('sliderD');
     let dVal = parseFloat(sliderD.value);
@@ -312,6 +314,7 @@ function dilatationShape(){
             vertex[1] = center[1] + ((vertex[1] - center[1]) * dVal) / scaleBefore;
         });
         redrawShape(indexShape);
+        shapes[indexShape].initialVert = shapes[indexShape].verticesList;
     })
     scaleBefore = dVal;
 }

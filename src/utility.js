@@ -159,7 +159,8 @@ function storeShape(verticesList, shapeType, fragColorList) {
         verticesList: verticesList,
         shapeType: shapeType,
         fragColorList: fragColorList,
-        name: `${shapeType} ${shapes.length + 1}`
+        name: `${shapeType} ${shapes.length + 1}`,
+        initialVert: verticesList
     };
     shapes.push(shape);
     return shapes;
