@@ -2,8 +2,6 @@ const lineButton = document.getElementById('line');
 const squareButton = document.getElementById('square');
 const rectangleButton = document.getElementById('rect');
 const polygonButton = document.getElementById('poly');
-const finishButton = document.getElementById('finish-btn');
-
 const sliderX = document.getElementById('sliderX');
 
 

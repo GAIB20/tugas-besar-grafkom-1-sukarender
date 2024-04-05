@@ -36,7 +36,6 @@ rectangleButton.addEventListener('click', function() {
 });
 
 polygonButton.addEventListener('click', function() {
-    document.getElementById("finish-btn").style.display = "block";
     isDrawing = false;
     count=0;
     canvas.removeEventListener('mousedown', handleMouseDown);

@@ -33,8 +33,6 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
     fragColor = fragColorList.flat();
     console.log(verticesList);
     console.log(vertices);
-    // var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
-    // gl.drawArrays(primitiveType, 0, vertices.length / 2);
     storeShape(verticesList, shapeType, fragColorList);
     console.log(shapes);
     displayShape(shapes);
@@ -64,8 +62,6 @@ function drawPolygon(){
         vertices = verticesList.flat();
         primitiveType = gl.TRIANGLE_FAN;
         fragColor = fragColorList.flat();
-        var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
-        gl.drawArrays(primitiveType, 0, vertices.length / 2);
     }
 
    
@@ -317,28 +313,3 @@ function dilatationShape(){
     })
     scaleBefore = dVal;
 }
-
-function finishPolygon() {
-    if (currentShapeType === "polygon") {
-        var verticesCount = verticesList.length;
-        var fragColorList = [];
-
-        for (var i = 0; i < verticesCount; i++) {
-            fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
-        }
-        shapeType = "polygon";
-        storeShape(verticesList, shapeType, fragColorList);
-        console.log(shapes);
-        displayShape(shapes);
-        redrawShape(shapes.length - 1);
-        vertices = verticesList.flat();
-        primitiveType = gl.TRIANGLE_FAN;
-        fragColor = fragColorList.flat();
-        var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
-        gl.drawArrays(primitiveType, 0, vertices.length / 2);
-        document.getElementById("finish-btn").style.display = "none"; 
-    } else {
-        console.error("No polygon to finish");
-    }
-}
-document.getElementById("finish-btn").addEventListener("click", finishPolygon);
