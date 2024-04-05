@@ -26,11 +26,12 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
                             [endX / canvas.width * 2 - 1, 1 - startY / canvas.height * 2],
                             [endX / canvas.width * 2 - 1, 1 - endY / canvas.height * 2] ];
         primitiveType = gl.TRIANGLE_STRIP;
-        console.error("Invalid shape type");
-        return;
+
     }
     vertices = verticesList.flat();
+
     fragColor = fragColorList.flat();
+    console.log(verticesList);
     console.log(vertices);
     var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
     gl.drawArrays(primitiveType, 0, vertices.length / 2);
@@ -41,31 +42,20 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
 }
 
 function drawPolygon(){
-    var verticesCount = vertices_polygon.length;
-    var fragColorList = [];
-
-    for (var i = 0; i < verticesCount; i++) {
-        fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
-    }
-    if (vertices_polygon.length < 3) {
+    
+    if (verticesList.length < 3) {
         console.error("Not enough vertices to form a polygon");
         return;
     }
-    shapeType = "polygon";
-    verticesList = vertices_polygon;
+
     primitiveType = gl.TRIANGLE_FAN;
-    console.log(verticesList);
-    vertices = verticesList.flat();
-    fragColor = fragColorList.flat();
-    console.log(vertices);
-    var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
-    gl.drawArrays(primitiveType, 0, vertices.length / 2);
+    // console.log(verticesList);
+    // console.log(vertices);
+  
 
-    storeShape(verticesList, shapeType, fragColorList);
-
-    console.log(shapes);
-    displayShape(shapes);
-    redrawShape(shapes.length - 1);
+    // console.log(shapes);
+    // displayShape(shapes);
+    // redrawShape(shapes.length - 1);
 }
 
 function redrawShape(shapeIndex, color) {
@@ -314,3 +304,28 @@ function dilatationShape(){
     })
     scaleBefore = dVal;
 }
+
+function finishPolygon() {
+    if (currentShapeType === "polygon") {
+        var verticesCount = verticesList.length;
+        var fragColorList = [];
+
+        for (var i = 0; i < verticesCount; i++) {
+            fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
+        }
+        shapeType = "polygon";
+        storeShape(verticesList, shapeType, fragColorList);
+        console.log(shapes);
+        displayShape(shapes);
+        redrawShape(shapes.length - 1);
+        vertices = verticesList.flat();
+        primitiveType = gl.TRIANGLE_FAN;
+        fragColor = fragColorList.flat();
+        var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
+        gl.drawArrays(primitiveType, 0, vertices.length / 2);
+        document.getElementById("finish-btn").style.display = "none"; // Add this line
+    } else {
+        console.error("No polygon to finish");
+    }
+}
+document.getElementById("finish-btn").addEventListener("click", finishPolygon);

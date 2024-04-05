@@ -1,7 +1,7 @@
 let selectedShapeIndex = null;
 let selectedVertexIndex = null;
 let selectedVertices = [];
-var vertices_polygon = [];
+var verticesList = [];
 
 const colorPicker = document.getElementById('color-picker');
 
@@ -31,25 +31,25 @@ function getYClipValue(y) {
 function handleMouseDown(event){
     if (currentShapeType === "polygon" ) {
         if(count==0){
-            vertices_polygon = [];
+            verticesList = [];
         }
         isDrawing = true;
-        let x = getXClipValue(event.offsetX);
-        let y = getYClipValue(event.offsetY);
-        vertices_polygon.push([x, y]);
+        let x = event.offsetX / canvas.width * 2 - 1;
+        let y = 1 - event.offsetY / canvas.height * 2;
+        verticesList.push([x, y]);
     
-        if (vertices_polygon.length > 3) {
-            vertices_polygon = convexHull(vertices_polygon);
+        if (verticesList.length > 3) {
+            verticesList = convexHull(verticesList);
             
-            let dist1 = Math.hypot(vertices_polygon[vertices_polygon.length - 1][0] - x, vertices_polygon[vertices_polygon.length - 1][1] - y);
-            let dist2 = Math.hypot(vertices_polygon[vertices_polygon.length - 2][0] - x, vertices_polygon[vertices_polygon.length - 2][1] - y);
+            let dist1 = Math.hypot(verticesList[verticesList.length - 1][0] - x, verticesList[verticesList.length - 1][1] - y);
+            let dist2 = Math.hypot(verticesList[verticesList.length - 2][0] - x, verticesList[verticesList.length - 2][1] - y);
             if (dist1 < dist2) {
-                let temp = vertices_polygon[vertices_polygon.length - 1];
-                vertices_polygon[vertices_polygon.length - 1] = vertices_polygon[vertices_polygon.length - 2];
-                vertices_polygon[vertices_polygon.length - 2] = temp;
+                let temp = verticesList[verticesList.length - 1];
+                verticesList[verticesList.length - 1] = verticesList[verticesList.length - 2];
+                verticesList[verticesList.length - 2] = temp;
             }
         }
-        console.log("v_poly:", vertices_polygon);
+        console.log("v_poly:", verticesList);
         drawPolygon();
         console.log("polygon");
         count++;
@@ -73,10 +73,10 @@ function handleMouseDown(event){
                 console.log("rectangle");
             }
             else if(currentShapeType === "polygon"){
-                vertices_polygon = [];
+                verticesList = [];
                 let x = getXClipValue(event.offsetX);
                 let y = getYClipValue(event.offsetY);
-                vertices_polygon.push([x, y]);
+                verticesList.push([x, y]);
                 console.log("polygon");
             }
             count++;
@@ -194,7 +194,6 @@ function displayShape(arrayShape) {
         descButton.textContent = "↓";
         descButton.className = 'btn-desc';
         headerDiv.appendChild(descButton);
-        
         const shapeButton = document.createElement('button');
         shapeButton.textContent = `Shape ${shapeIndex + 1}`;
         shapeButton.className = 'btn-shape';
