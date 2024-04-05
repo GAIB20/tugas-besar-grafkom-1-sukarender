@@ -41,7 +41,7 @@ function hexToRgb(hex) {
 
 function handleMouseDown(event){
     if (currentShapeType === "polygon" && !isEditing) {
-        if(count==0){
+        if(countpolygon==0){
             verticesList = [];
         }
         
