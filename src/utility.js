@@ -303,11 +303,6 @@ function displayShape(arrayShape) {
                         isEditing = true;
                         currentShapeIndex = shapeIndex;
                         console.log("shapeIndex:", shapeIndex);
-                        // shapes[shapeIndex].verticesList.push(newVertex);
-                        // if (shapes[shapeIndex].verticesList.length > 2) {
-                        //     shapes[shapeIndex].verticesList = convexHull(shapes[shapeIndex].verticesList);
-
-                        // }
                     }
                     
                 });
@@ -401,7 +396,6 @@ function loadJson(){
 
 function deleteObject(){
     selectedVertices.forEach((shape, shapeIndex) => {
-        // delete object if all vertices are selected
         if (shape){
             delete shapes[shapeIndex];
         }

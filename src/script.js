@@ -146,17 +146,7 @@ function editShapes() {
 
     let xVal = parseFloat(sliderX.value);
     let yVal = parseFloat(sliderY.value);
-    // shapes[indexShape].initialVert = shapes[indexShape].verticesList;
-
-
-    // // check how many of the selected shapes are empty
-    // let count = 0;
-    // selectedVertices.forEach(( listIndex, indexShape ) => {
-    //     if(listIndex.length < 1 ){
-    //         count++;
-    //     }
-    // });
-
+    
     selectedVertices.forEach(( listIndex, indexShape ) => {
         if(listIndex.length > 1 ){
             shapes[indexShape].verticesList.forEach(vertex => {
