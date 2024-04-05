@@ -54,7 +54,7 @@ function drawPolygon(){
             fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
         }  
         shapeType = "polygon";
-        if (shapes.length > 0 && shapes[shapes.length - 1].shapeType === "polygon") {
+        if (shapes.length > 0 && shapes[shapes.length - 1].shapeType === "polygon"){ 
             shapes.pop();
         }
         storeShape(verticesList, shapeType, fragColorList);

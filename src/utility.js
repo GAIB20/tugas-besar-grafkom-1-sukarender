@@ -2,6 +2,8 @@ let selectedShapeIndex = null;
 let selectedVertexIndex = null;
 let selectedVertices = [];
 var verticesList = [];
+var countpolygon = 0;
+var push = true;
 
 const colorPicker = document.getElementById('color-picker');
 
@@ -17,22 +19,32 @@ function hexToRgb(hex) {
 
 function handleMouseDown(event){
     if (currentShapeType === "polygon" ) {
-        if(count==0){
+        if(countpolygon==0){
             verticesList = [];
         }
         isDrawing = true;
+        push = true;
+        console.log(countpolygon);
+        console.log(verticesList.length);
         let x = event.offsetX / canvas.width * 2 - 1;
         let y = 1 - event.offsetY / canvas.height * 2;
-        verticesList.push([x, y]);
-    
+        // check if [x,y] is in the verticelist
+        for (let i=0; i<verticesList.length; i++){
+            if (verticesList[i][0] == x && verticesList[i][1] == y){
+                push = false;
+            }
+        }
+        console.log(push);
+        if (push){
+            verticesList.push([x, y]);
+        }  
         if (verticesList.length > 3) {
             verticesList = convexHull(verticesList);
-            
         }
         console.log("v_poly:", verticesList);
         drawPolygon();
         console.log("polygon");
-        count++;
+        countpolygon++;
     } else {
         if (count==0){
             isDrawing = true;
