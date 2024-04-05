@@ -38,6 +38,7 @@ rectangleButton.addEventListener('click', function() {
 polygonButton.addEventListener('click', function() {
     isDrawing = false;
     count=0;
+    countpolygon=0;
     canvas.removeEventListener('mousedown', handleMouseDown);
     canvas.removeEventListener('mousemove', handleMouseMove);
     canvas.removeEventListener('mouseup', handleMouseUp);

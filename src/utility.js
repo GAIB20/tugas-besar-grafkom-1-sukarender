@@ -5,6 +5,9 @@ let selectedVertices = [];
 var verticesList = [];
 let isEditing = false;
 let currentShapeIndex = null;
+var countpolygon = 0;
+var push = true;
+
 const colorPicker = document.getElementById('color-picker');
 document.getElementById("clear-btn").addEventListener("click", function() {
     var canvas = document.getElementById("panel");
@@ -43,31 +46,29 @@ function handleMouseDown(event){
         }
         
         isDrawing = true;
+        push = true;
+        console.log(countpolygon);
+        console.log(verticesList.length);
         let x = event.offsetX / canvas.width * 2 - 1;
         let y = 1 - event.offsetY / canvas.height * 2;
-        verticesList.push([x, y]);
-    
+        // check if [x,y] is in the verticelist
+        for (let i=0; i<verticesList.length; i++){
+            if (verticesList[i][0] == x && verticesList[i][1] == y){
+                push = false;
+            }
+        }
+        console.log(push);
+        if (push){
+            verticesList.push([x, y]);
+        }  
         if (verticesList.length > 3) {
             verticesList = convexHull(verticesList); 
         }
         console.log("v_poly:", verticesList);
         drawPolygon();
         console.log("polygon");
-        count++;
-    }else if (currentShapeType === "polygon" && isEditing) {
-        console.log("masuk siniiiii");
-        let x = event.offsetX / canvas.width * 2 - 1;
-        let y = 1 - event.offsetY / canvas.height * 2;
-        newVertex = [x, y];
-        console.log("newVertex:", newVertex);
-        console.log(shapes[currentShapeIndex].verticesList);
-        shapes[currentShapeIndex].verticesList.push(newVertex);
-        console.log(shapes[currentShapeIndex].verticesList);
-        isEditing = false;
-        newVertex = null;
-        redrawShape(0);
-    }
-     else {
+        countpolygon++;
+    } else {
         if (count==0){
             isDrawing = true;
             startX = event.offsetX;
@@ -172,7 +173,9 @@ function storeShape(verticesList, shapeType, fragColorList) {
     var shape = {
         verticesList: verticesList,
         shapeType: shapeType,
-        fragColorList: fragColorList
+        fragColorList: fragColorList,
+        name: `${shapeType} ${shapes.length + 1}`,
+        initialVert: verticesList
     };
     shapes.push(shape);
     return shapes;
@@ -203,20 +206,20 @@ function displayShape(arrayShape) {
         headerDiv.className = 'header-div';
         shapeDiv.appendChild(headerDiv);
 
-        
         const descButton = document.createElement('button');
         descButton.textContent = "↓";
         descButton.className = 'btn-desc';
+        descButton.id = `desc-${shapeIndex}`;
         headerDiv.appendChild(descButton);
         const shapeButton = document.createElement('button');
-        shapeButton.textContent = `Shape ${shapeIndex + 1}`;
+        shapeButton.textContent = shapes[shapeIndex].name;
         shapeButton.className = 'btn-shape';
         headerDiv.appendChild(shapeButton);
-        
         
         const ascButton = document.createElement('button');
         ascButton.textContent = "↑";
         ascButton.className = 'btn-asc';
+        ascButton.id = `asc-${shapeIndex}`;
         headerDiv.appendChild(ascButton);
 
         shape.verticesList.forEach((vertex, vertexIndex) => {
@@ -256,9 +259,37 @@ function displayShape(arrayShape) {
                 
                 
             });
+            
+        });
+        
+        ascButton.addEventListener('click', () => {
+            // get asc button id
 
+            // check if shape index is not in first
+            if (shapeIndex > 0) {
+                const temp = shapes[shapeIndex - 1];
+                console.log(temp);
+                shapes[shapeIndex - 1] = shapes[shapeIndex];
+                shapes[shapeIndex] = temp;
+                console.log(shapes);
+                redrawAllShapes();
+                displayShape(shapes);
+            }
         });
 
+        descButton.addEventListener('click', () => {
+            // check if shape index is not in last
+            if (shapeIndex < shapes.length - 1) {
+                const temp = shapes[shapeIndex + 1];
+                console.log(temp);
+                shapes[shapeIndex + 1] = shapes[shapeIndex];
+                shapes[shapeIndex] = temp;
+                console.log(shapes);
+                redrawAllShapes();
+                displayShape(shapes);
+            }
+        }
+        );
         shapeButton.addEventListener('click', () => {
             console.log(`Shape ${shapeIndex + 1} clicked`);
         
