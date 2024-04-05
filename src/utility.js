@@ -158,7 +158,8 @@ function storeShape(verticesList, shapeType, fragColorList) {
     var shape = {
         verticesList: verticesList,
         shapeType: shapeType,
-        fragColorList: fragColorList
+        fragColorList: fragColorList,
+        name: `${shapeType} ${shapes.length + 1}`
     };
     shapes.push(shape);
     return shapes;
@@ -189,21 +190,21 @@ function displayShape(arrayShape) {
         headerDiv.className = 'header-div';
         shapeDiv.appendChild(headerDiv);
 
-        
         const descButton = document.createElement('button');
         descButton.textContent = "↓";
         descButton.className = 'btn-desc';
+        descButton.id = `desc-${shapeIndex}`;
         headerDiv.appendChild(descButton);
         
         const shapeButton = document.createElement('button');
-        shapeButton.textContent = `Shape ${shapeIndex + 1}`;
+        shapeButton.textContent = shapes[shapeIndex].name;
         shapeButton.className = 'btn-shape';
         headerDiv.appendChild(shapeButton);
-        
         
         const ascButton = document.createElement('button');
         ascButton.textContent = "↑";
         ascButton.className = 'btn-asc';
+        ascButton.id = `asc-${shapeIndex}`;
         headerDiv.appendChild(ascButton);
 
         shape.verticesList.forEach((vertex, vertexIndex) => {
@@ -235,6 +236,8 @@ function displayShape(arrayShape) {
             //     }
             //     console.log(selectedVertices);
             // });
+
+            
             vertexCheckbox.addEventListener('change', () => {
                 if (vertexCheckbox.checked) {
                     if (!selectedVertices[shapeIndex]) {
@@ -252,9 +255,37 @@ function displayShape(arrayShape) {
                 console.log(selectedVertices);
                 
             });
+            
+        });
+        
+        ascButton.addEventListener('click', () => {
+            // get asc button id
 
+            // check if shape index is not in first
+            if (shapeIndex > 0) {
+                const temp = shapes[shapeIndex - 1];
+                console.log(temp);
+                shapes[shapeIndex - 1] = shapes[shapeIndex];
+                shapes[shapeIndex] = temp;
+                console.log(shapes);
+                redrawAllShapes();
+                displayShape(shapes);
+            }
         });
 
+        descButton.addEventListener('click', () => {
+            // check if shape index is not in last
+            if (shapeIndex < shapes.length - 1) {
+                const temp = shapes[shapeIndex + 1];
+                console.log(temp);
+                shapes[shapeIndex + 1] = shapes[shapeIndex];
+                shapes[shapeIndex] = temp;
+                console.log(shapes);
+                redrawAllShapes();
+                displayShape(shapes);
+            }
+        }
+        );
         shapeButton.addEventListener('click', () => {
             // check if shape index is in vertices list
             console.log(`Shape ${shapeIndex + 1} clicked`);
