@@ -14,17 +14,33 @@ function hexToRgb(hex) {
         1.0
     ];
 }
+function getXClipValue(x) {
+    let half = canvas.width / 2;
+    return (x - half) / half;
+}
+
+/**
+ * @description Convert pixel to clip value [-1..1]
+ * @param {integer} y - pixel value y
+ */
+function getYClipValue(y) {
+    let half = canvas.height / 2;
+    return -(y - half) / half;
+}
 
 function handleMouseDown(event){
-    if (currentShapeType === "polygon") {
+    if (currentShapeType === "polygon" ) {
+        if(count==0){
+            vertices_polygon = [];
+        }
         isDrawing = true;
-        let x = event.offsetX / canvas.width * 2 - 1;
-        let y = 1 - event.offsetY / canvas.height * 2;
+        let x = getXClipValue(event.offsetX);
+        let y = getYClipValue(event.offsetY);
         vertices_polygon.push([x, y]);
     
         if (vertices_polygon.length > 3) {
             vertices_polygon = convexHull(vertices_polygon);
-            // Swap the last two points if necessary to ensure that the last point is the furthest
+            
             let dist1 = Math.hypot(vertices_polygon[vertices_polygon.length - 1][0] - x, vertices_polygon[vertices_polygon.length - 1][1] - y);
             let dist2 = Math.hypot(vertices_polygon[vertices_polygon.length - 2][0] - x, vertices_polygon[vertices_polygon.length - 2][1] - y);
             if (dist1 < dist2) {
@@ -33,9 +49,10 @@ function handleMouseDown(event){
                 vertices_polygon[vertices_polygon.length - 2] = temp;
             }
         }
-    
+        console.log("v_poly:", vertices_polygon);
         drawPolygon();
         console.log("polygon");
+        count++;
     } else {
         if (count==0){
             isDrawing = true;
@@ -54,6 +71,13 @@ function handleMouseDown(event){
             else if (currentShapeType === "rectangle") {
                 drawShape(gl, startX, startY, endX, endY, "rectangle");
                 console.log("rectangle");
+            }
+            else if(currentShapeType === "polygon"){
+                vertices_polygon = [];
+                let x = getXClipValue(event.offsetX);
+                let y = getYClipValue(event.offsetY);
+                vertices_polygon.push([x, y]);
+                console.log("polygon");
             }
             count++;
         }
@@ -160,11 +184,27 @@ function displayShape(arrayShape) {
         const shapeDiv = document.createElement('div');
         shapeDiv.className = 'shape-div';
         shapeList.appendChild(shapeDiv);
+        
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'header-div';
+        shapeDiv.appendChild(headerDiv);
 
+        
+        const descButton = document.createElement('button');
+        descButton.textContent = "↓";
+        descButton.className = 'btn-desc';
+        headerDiv.appendChild(descButton);
+        
         const shapeButton = document.createElement('button');
         shapeButton.textContent = `Shape ${shapeIndex + 1}`;
         shapeButton.className = 'btn-shape';
-        shapeDiv.appendChild(shapeButton);
+        headerDiv.appendChild(shapeButton);
+        
+        
+        const ascButton = document.createElement('button');
+        ascButton.textContent = "↑";
+        ascButton.className = 'btn-asc';
+        headerDiv.appendChild(ascButton);
 
         shape.verticesList.forEach((vertex, vertexIndex) => {
             const vertexDiv = document.createElement('div');
