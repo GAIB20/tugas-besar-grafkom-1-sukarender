@@ -33,8 +33,8 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
     fragColor = fragColorList.flat();
     console.log(verticesList);
     console.log(vertices);
-    var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
-    gl.drawArrays(primitiveType, 0, vertices.length / 2);
+    // var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
+    // gl.drawArrays(primitiveType, 0, vertices.length / 2);
     storeShape(verticesList, shapeType, fragColorList);
     console.log(shapes);
     displayShape(shapes);
@@ -46,16 +46,29 @@ function drawPolygon(){
     if (verticesList.length < 3) {
         console.error("Not enough vertices to form a polygon");
         return;
+    } else {
+        var verticesCount = verticesList.length;
+        var fragColorList = [];
+    
+        for (var i = 0; i < verticesCount; i++) {
+            fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
+        }  
+        shapeType = "polygon";
+        if (shapes.length > 0 && shapes[shapes.length - 1].shapeType === "polygon") {
+            shapes.pop();
+        }
+        storeShape(verticesList, shapeType, fragColorList);
+        console.log(shapes);
+        displayShape(shapes);
+        redrawShape(shapes.length - 1);
+        vertices = verticesList.flat();
+        primitiveType = gl.TRIANGLE_FAN;
+        fragColor = fragColorList.flat();
+        var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
+        gl.drawArrays(primitiveType, 0, vertices.length / 2);
     }
 
-    primitiveType = gl.TRIANGLE_FAN;
-    // console.log(verticesList);
-    // console.log(vertices);
-  
-
-    // console.log(shapes);
-    // displayShape(shapes);
-    // redrawShape(shapes.length - 1);
+   
 }
 
 function redrawShape(shapeIndex, color) {
@@ -323,7 +336,7 @@ function finishPolygon() {
         fragColor = fragColorList.flat();
         var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
         gl.drawArrays(primitiveType, 0, vertices.length / 2);
-        document.getElementById("finish-btn").style.display = "none"; // Add this line
+        document.getElementById("finish-btn").style.display = "none"; 
     } else {
         console.error("No polygon to finish");
     }

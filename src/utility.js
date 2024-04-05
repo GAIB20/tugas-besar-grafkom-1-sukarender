@@ -14,19 +14,6 @@ function hexToRgb(hex) {
         1.0
     ];
 }
-function getXClipValue(x) {
-    let half = canvas.width / 2;
-    return (x - half) / half;
-}
-
-/**
- * @description Convert pixel to clip value [-1..1]
- * @param {integer} y - pixel value y
- */
-function getYClipValue(y) {
-    let half = canvas.height / 2;
-    return -(y - half) / half;
-}
 
 function handleMouseDown(event){
     if (currentShapeType === "polygon" ) {
@@ -38,17 +25,17 @@ function handleMouseDown(event){
         let y = 1 - event.offsetY / canvas.height * 2;
         verticesList.push([x, y]);
     
-        if (verticesList.length > 3) {
-            verticesList = convexHull(verticesList);
+        // if (verticesList.length > 3) {
+        //     // verticesList = convexHull(verticesList);
             
-            let dist1 = Math.hypot(verticesList[verticesList.length - 1][0] - x, verticesList[verticesList.length - 1][1] - y);
-            let dist2 = Math.hypot(verticesList[verticesList.length - 2][0] - x, verticesList[verticesList.length - 2][1] - y);
-            if (dist1 < dist2) {
-                let temp = verticesList[verticesList.length - 1];
-                verticesList[verticesList.length - 1] = verticesList[verticesList.length - 2];
-                verticesList[verticesList.length - 2] = temp;
-            }
-        }
+        //     let dist1 = Math.hypot(verticesList[verticesList.length - 1][0] - x, verticesList[verticesList.length - 1][1] - y);
+        //     let dist2 = Math.hypot(verticesList[verticesList.length - 2][0] - x, verticesList[verticesList.length - 2][1] - y);
+        //     if (dist1 < dist2) {
+        //         let temp = verticesList[verticesList.length - 1];
+        //         verticesList[verticesList.length - 1] = verticesList[verticesList.length - 2];
+        //         verticesList[verticesList.length - 2] = temp;
+        //     }
+        // }
         console.log("v_poly:", verticesList);
         drawPolygon();
         console.log("polygon");
@@ -234,6 +221,7 @@ function displayShape(arrayShape) {
             //     }
             //     console.log(selectedVertices);
             // });
+
             vertexCheckbox.addEventListener('change', () => {
                 if (vertexCheckbox.checked) {
                     if (!selectedVertices[shapeIndex]) {
