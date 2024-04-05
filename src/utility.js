@@ -1,7 +1,7 @@
 let selectedShapeIndex = null;
 let selectedVertexIndex = null;
 let selectedVertices = [];
-var vertices_polygon = [];
+var verticesList = [];
 
 const colorPicker = document.getElementById('color-picker');
 
@@ -14,42 +14,22 @@ function hexToRgb(hex) {
         1.0
     ];
 }
-function getXClipValue(x) {
-    let half = canvas.width / 2;
-    return (x - half) / half;
-}
-
-/**
- * @description Convert pixel to clip value [-1..1]
- * @param {integer} y - pixel value y
- */
-function getYClipValue(y) {
-    let half = canvas.height / 2;
-    return -(y - half) / half;
-}
 
 function handleMouseDown(event){
     if (currentShapeType === "polygon" ) {
         if(count==0){
-            vertices_polygon = [];
+            verticesList = [];
         }
         isDrawing = true;
-        let x = getXClipValue(event.offsetX);
-        let y = getYClipValue(event.offsetY);
-        vertices_polygon.push([x, y]);
+        let x = event.offsetX / canvas.width * 2 - 1;
+        let y = 1 - event.offsetY / canvas.height * 2;
+        verticesList.push([x, y]);
     
-        if (vertices_polygon.length > 3) {
-            vertices_polygon = convexHull(vertices_polygon);
+        if (verticesList.length > 3) {
+            verticesList = convexHull(verticesList);
             
-            let dist1 = Math.hypot(vertices_polygon[vertices_polygon.length - 1][0] - x, vertices_polygon[vertices_polygon.length - 1][1] - y);
-            let dist2 = Math.hypot(vertices_polygon[vertices_polygon.length - 2][0] - x, vertices_polygon[vertices_polygon.length - 2][1] - y);
-            if (dist1 < dist2) {
-                let temp = vertices_polygon[vertices_polygon.length - 1];
-                vertices_polygon[vertices_polygon.length - 1] = vertices_polygon[vertices_polygon.length - 2];
-                vertices_polygon[vertices_polygon.length - 2] = temp;
-            }
         }
-        console.log("v_poly:", vertices_polygon);
+        console.log("v_poly:", verticesList);
         drawPolygon();
         console.log("polygon");
         count++;
@@ -73,10 +53,10 @@ function handleMouseDown(event){
                 console.log("rectangle");
             }
             else if(currentShapeType === "polygon"){
-                vertices_polygon = [];
+                verticesList = [];
                 let x = getXClipValue(event.offsetX);
                 let y = getYClipValue(event.offsetY);
-                vertices_polygon.push([x, y]);
+                verticesList.push([x, y]);
                 console.log("polygon");
             }
             count++;
@@ -196,7 +176,6 @@ function displayShape(arrayShape) {
         descButton.className = 'btn-desc';
         descButton.id = `desc-${shapeIndex}`;
         headerDiv.appendChild(descButton);
-        
         const shapeButton = document.createElement('button');
         shapeButton.textContent = shapes[shapeIndex].name;
         shapeButton.className = 'btn-shape';
@@ -228,17 +207,6 @@ function displayShape(arrayShape) {
             vertexLabel.textContent = `Vertex ${vertexIndex + 1}`;
             vertexDiv.appendChild(vertexLabel);
 
-            // vertexCheckbox.addEventListener('change', () => {
-            //     if (vertexCheckbox.checked) {
-            //         selectedVertices.push({ shapeIndex, vertexIndex });
-            //         console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} selected`);
-            //     } else {
-            //         selectedVertices = selectedVertices.filter(vertex => vertex.shapeIndex !== shapeIndex || vertex.vertexIndex !== vertexIndex);
-            //     }
-            //     console.log(selectedVertices);
-            // });
-
-            
             vertexCheckbox.addEventListener('change', () => {
                 if (vertexCheckbox.checked) {
                     if (!selectedVertices[shapeIndex]) {
@@ -288,7 +256,7 @@ function displayShape(arrayShape) {
         }
         );
         shapeButton.addEventListener('click', () => {
-            // check if shape index is in vertices list
+
             console.log(`Shape ${shapeIndex + 1} clicked`);
             if (selectedVertices[shapeIndex]) {
                 selectedVertices[shapeIndex].forEach(vertexIndex => {

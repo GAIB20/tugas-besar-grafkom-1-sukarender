@@ -47,3 +47,4 @@ polygonButton.addEventListener('click', function() {
     canvas.addEventListener('mouseup', (event) => handleMouseUp(event, "polygon"));
 }
 );
+

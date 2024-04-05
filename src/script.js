@@ -31,10 +31,10 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
         return;
     }
     vertices = verticesList.flat();
+
     fragColor = fragColorList.flat();
+    console.log(verticesList);
     console.log(vertices);
-    var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
-    gl.drawArrays(primitiveType, 0, vertices.length / 2);
     storeShape(verticesList, shapeType, fragColorList);
     console.log(shapes);
     displayShape(shapes);
@@ -42,31 +42,31 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
 }
 
 function drawPolygon(){
-    var verticesCount = vertices_polygon.length;
-    var fragColorList = [];
-
-    for (var i = 0; i < verticesCount; i++) {
-        fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
-    }
-    if (vertices_polygon.length < 3) {
+    
+    if (verticesList.length < 3) {
         console.error("Not enough vertices to form a polygon");
         return;
+    } else {
+        var verticesCount = verticesList.length;
+        var fragColorList = [];
+    
+        for (var i = 0; i < verticesCount; i++) {
+            fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
+        }  
+        shapeType = "polygon";
+        if (shapes.length > 0 && shapes[shapes.length - 1].shapeType === "polygon") {
+            shapes.pop();
+        }
+        storeShape(verticesList, shapeType, fragColorList);
+        console.log(shapes);
+        displayShape(shapes);
+        redrawShape(shapes.length - 1);
+        vertices = verticesList.flat();
+        primitiveType = gl.TRIANGLE_FAN;
+        fragColor = fragColorList.flat();
     }
-    shapeType = "polygon";
-    verticesList = vertices_polygon;
-    primitiveType = gl.TRIANGLE_FAN;
-    console.log(verticesList);
-    vertices = verticesList.flat();
-    fragColor = fragColorList.flat();
-    console.log(vertices);
-    var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
-    gl.drawArrays(primitiveType, 0, vertices.length / 2);
 
-    storeShape(verticesList, shapeType, fragColorList);
-
-    console.log(shapes);
-    displayShape(shapes);
-    redrawShape(shapes.length - 1);
+   
 }
 
 function redrawShape(shapeIndex, color) {
@@ -237,6 +237,11 @@ function editShapes() {
                     shapes[indexShape].verticesList[1][0] = shapes[indexShape].verticesList[3][0]
                     shapes[indexShape].verticesList[2][1] = shapes[indexShape].verticesList[3][1]
                 }
+            }
+
+            if(shapes[indexShape].shapeType == "polygon"){
+                shapes[indexShape].verticesList[listIndex[0]][0] += xVal - xBefore
+                shapes[indexShape].verticesList[listIndex[0]][1] -= yVal - yBefore
             }
         redrawShape(indexShape)
         shapes[indexShape].initialVert = shapes[indexShape].verticesList;
