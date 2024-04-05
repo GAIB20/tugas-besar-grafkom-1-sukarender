@@ -399,6 +399,18 @@ function loadJson(){
     input.click();
 }
 
+function deleteObject(){
+    selectedVertices.forEach((shape, shapeIndex) => {
+        // delete object if all vertices are selected
+        if (shape){
+            delete shapes[shapeIndex];
+        }
+    });
+    redrawAllShapes();
+    displayShape(shapes);
+
+}
+
 
 function convexHull(points) {
     if (points.length < 3) return [];
