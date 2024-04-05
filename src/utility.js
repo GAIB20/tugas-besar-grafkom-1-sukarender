@@ -1,9 +1,30 @@
 let selectedShapeIndex = null;
 let selectedVertexIndex = null;
+let newVertex = null;
 let selectedVertices = [];
 var verticesList = [];
-
+let isEditing = false;
+let currentShapeIndex = null;
 const colorPicker = document.getElementById('color-picker');
+document.getElementById("clear-btn").addEventListener("click", function() {
+    var canvas = document.getElementById("panel");
+    var gl = canvas.getContext("webgl");
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    shapes = [];
+    verticesList = [];
+    displayShape(shapes);
+    isDrawing = false;
+    currentShapeType = null;
+});
+document.getElementById("panel").addEventListener('mousedown', function(event) {
+    // Get the mouse coordinates
+    let x = event.offsetX / canvas.width * 2 - 1;
+    let y = 1 - event.offsetY / canvas.height * 2;
+    newVertex = [x, y];
+});
+
+
 
 function hexToRgb(hex) {
     hex = hex.replace('#', '');
@@ -13,27 +34,40 @@ function hexToRgb(hex) {
         parseInt(hex.substring(4, 6), 16) / 255,
         1.0
     ];
-}
+}                
 
 function handleMouseDown(event){
-    if (currentShapeType === "polygon" ) {
+    if (currentShapeType === "polygon" && !isEditing) {
         if(count==0){
             verticesList = [];
         }
+        
         isDrawing = true;
         let x = event.offsetX / canvas.width * 2 - 1;
         let y = 1 - event.offsetY / canvas.height * 2;
         verticesList.push([x, y]);
     
         if (verticesList.length > 3) {
-            verticesList = convexHull(verticesList);
-            
+            verticesList = convexHull(verticesList); 
         }
         console.log("v_poly:", verticesList);
         drawPolygon();
         console.log("polygon");
         count++;
-    } else {
+    }else if (currentShapeType === "polygon" && isEditing) {
+        console.log("masuk siniiiii");
+        let x = event.offsetX / canvas.width * 2 - 1;
+        let y = 1 - event.offsetY / canvas.height * 2;
+        newVertex = [x, y];
+        console.log("newVertex:", newVertex);
+        console.log(shapes[currentShapeIndex].verticesList);
+        shapes[currentShapeIndex].verticesList.push(newVertex);
+        console.log(shapes[currentShapeIndex].verticesList);
+        isEditing = false;
+        newVertex = null;
+        redrawShape(0);
+    }
+     else {
         if (count==0){
             isDrawing = true;
             startX = event.offsetX;
@@ -219,26 +253,66 @@ function displayShape(arrayShape) {
                         }
                     }
                 }
-                console.log(selectedVertices);
+                
                 
             });
 
         });
 
         shapeButton.addEventListener('click', () => {
-
             console.log(`Shape ${shapeIndex + 1} clicked`);
+        
+            // If the clicked button is the polygon button, show the Add and Delete buttons
+            if (shape.shapeType === "polygon") {
+                currentShapeType = "polygon";
+                document.getElementById("addVertexButton").style.display = "block";
+                document.getElementById("deleteVertexButton").style.display = "block";
+                document.getElementById("addVertexButton").addEventListener('click', function() {
+                    if (currentShapeType === "polygon") {
+                        isEditing = true;
+                        currentShapeIndex = shapeIndex;
+                        console.log("shapeIndex:", shapeIndex);
+                        // shapes[shapeIndex].verticesList.push(newVertex);
+                        // if (shapes[shapeIndex].verticesList.length > 2) {
+                        //     shapes[shapeIndex].verticesList = convexHull(shapes[shapeIndex].verticesList);
+
+                        // }
+                    }
+                    
+                });
+                document.getElementById("deleteVertexButton").addEventListener('click', function() {
+                    if (currentShapeType === "polygon" && selectedVertices[shapeIndex]) {
+                        shapes[shapeIndex].verticesList = shapes[shapeIndex].verticesList.filter((_, index) => !selectedVertices[shapeIndex].includes(index));
+                        delete selectedVertices[shapeIndex];
+                        console.log("shapes satu:", shapes)
+                        if (shapes[shapeIndex].verticesList.length < 3) {
+                            delete shapes[shapeIndex];
+                            console.log("shapes dua:", shapes)
+                            displayShape(shapes);
+                        }
+                        
+                    }
+                    redrawShape(shapes.length - 1);
+                    displayShape(shapes);
+                }
+                );
+
+                console.log("current::::", currentShapeType);
+            } else {
+                document.getElementById("addVertexButton").style.display = "none";
+                document.getElementById("deleteVertexButton").style.display = "none";
+            }
+        
             if (selectedVertices[shapeIndex]) {
                 selectedVertices[shapeIndex].forEach(vertexIndex => {
                     const vertexCheckbox = document.getElementById(`vertex-${shapeIndex}-${vertexIndex}`);
                     vertexCheckbox.checked = false;
                 });
                 delete selectedVertices[shapeIndex];
-            }
-            else {
+            } else {
                 shape.verticesList.forEach((_, vertexIndex) => {
-                    console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} clicked`);
-                    console.log(`Coordinate: (${shape.verticesList[vertexIndex][0]}, ${shape.verticesList[vertexIndex][1]})`);
+                    // console.log(`Shape ${shapeIndex + 1}-Vertex ${vertexIndex + 1} clicked`);
+                    // console.log(`Coordinate: (${shape.verticesList[vertexIndex][0]}, ${shape.verticesList[vertexIndex][1]})`);
                     const vertexCheckbox = document.getElementById(`vertex-${shapeIndex}-${vertexIndex}`);
                     vertexCheckbox.checked = true;
                     if (!selectedVertices[shapeIndex]) {
