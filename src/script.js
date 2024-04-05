@@ -234,6 +234,11 @@ function editShapes() {
                     shapes[indexShape].verticesList[2][1] = shapes[indexShape].verticesList[3][1]
                 }
             }
+
+            if(shapes[indexShape].shapeType == "polygon"){
+                shapes[indexShape].verticesList[listIndex[0]][0] += xVal - xBefore
+                shapes[indexShape].verticesList[listIndex[0]][1] -= yVal - yBefore
+            }
         redrawShape(indexShape)
     }
     });
