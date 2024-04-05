@@ -26,17 +26,43 @@ function drawShape(gl, startX, startY, endX, endY, shapeType) {
                             [endX / canvas.width * 2 - 1, 1 - startY / canvas.height * 2],
                             [endX / canvas.width * 2 - 1, 1 - endY / canvas.height * 2] ];
         primitiveType = gl.TRIANGLE_STRIP;
-    } else {
         console.error("Invalid shape type");
         return;
     }
-    
     vertices = verticesList.flat();
     fragColor = fragColorList.flat();
     console.log(vertices);
     var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
     gl.drawArrays(primitiveType, 0, vertices.length / 2);
     storeShape(verticesList, shapeType, fragColorList);
+    console.log(shapes);
+    displayShape(shapes);
+    redrawShape(shapes.length - 1);
+}
+
+function drawPolygon(){
+    var verticesCount = vertices_polygon.length;
+    var fragColorList = [];
+
+    for (var i = 0; i < verticesCount; i++) {
+        fragColorList.push([1.0, 0.0, 0.0, 1.0]); 
+    }
+    if (vertices_polygon.length < 3) {
+        console.error("Not enough vertices to form a polygon");
+        return;
+    }
+    shapeType = "polygon";
+    verticesList = vertices_polygon;
+    primitiveType = gl.TRIANGLE_FAN;
+    console.log(verticesList);
+    vertices = verticesList.flat();
+    fragColor = fragColorList.flat();
+    console.log(vertices);
+    var shaderProgram = setupShapeDrawing(gl, vertices, fragColor);
+    gl.drawArrays(primitiveType, 0, vertices.length / 2);
+
+    storeShape(verticesList, shapeType, fragColorList);
+
     console.log(shapes);
     displayShape(shapes);
     redrawShape(shapes.length - 1);
@@ -56,7 +82,16 @@ function redrawShape(shapeIndex, color) {
         }
 
         var primitiveType;
-        var primitiveType = shapeType === "line" ? gl.LINES : gl.TRIANGLE_STRIP;
+        if (shapeType === "line") {
+            primitiveType = gl.LINES;
+        } else if (shapeType === "square" || shapeType === "rectangle") {
+            primitiveType = gl.TRIANGLE_STRIP;
+        } else if (shapeType === "polygon") {
+            primitiveType = gl.TRIANGLE_FAN;
+        } else {
+            console.error("Invalid shape type");
+            return;
+        }
 
         setupShapeDrawing(gl);
 
@@ -200,8 +235,8 @@ function editShapes() {
                     shapes[indexShape].verticesList[2][1] = shapes[indexShape].verticesList[3][1]
                 }
             }
-            redrawShape(indexShape)
-        }
+        redrawShape(indexShape)
+    }
     });
     xBefore = xVal;
     yBefore = yVal;

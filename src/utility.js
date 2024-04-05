@@ -1,6 +1,7 @@
 let selectedShapeIndex = null;
 let selectedVertexIndex = null;
 let selectedVertices = [];
+var vertices_polygon = [];
 
 const colorPicker = document.getElementById('color-picker');
 
@@ -13,27 +14,49 @@ function hexToRgb(hex) {
         1.0
     ];
 }
-function handleMouseDown(event){
-    if (count==0){
-        isDrawing = true;
-        startX = event.offsetX;
-        startY = event.offsetY;
-        endX = event.offsetX;
-        endY = event.offsetY;
-        if (currentShapeType === "line") {
-            drawShape(gl, startX, startY, endX, endY, "line");
-            console.log("line");
-        }
-        else if (currentShapeType === "square") {
-            drawShape(gl, startX, startY, endX, endY, "square");
-            console.log("square");
-        } 
 
-        else if (currentShapeType === "rectangle") {
-            drawShape(gl, startX, startY, endX, endY, "rectangle");
-            console.log("rectangle");
+function handleMouseDown(event){
+    if (currentShapeType === "polygon") {
+        isDrawing = true;
+        let x = event.offsetX / canvas.width * 2 - 1;
+        let y = 1 - event.offsetY / canvas.height * 2;
+        vertices_polygon.push([x, y]);
+    
+        if (vertices_polygon.length > 3) {
+            vertices_polygon = convexHull(vertices_polygon);
+            // Swap the last two points if necessary to ensure that the last point is the furthest
+            let dist1 = Math.hypot(vertices_polygon[vertices_polygon.length - 1][0] - x, vertices_polygon[vertices_polygon.length - 1][1] - y);
+            let dist2 = Math.hypot(vertices_polygon[vertices_polygon.length - 2][0] - x, vertices_polygon[vertices_polygon.length - 2][1] - y);
+            if (dist1 < dist2) {
+                let temp = vertices_polygon[vertices_polygon.length - 1];
+                vertices_polygon[vertices_polygon.length - 1] = vertices_polygon[vertices_polygon.length - 2];
+                vertices_polygon[vertices_polygon.length - 2] = temp;
+            }
         }
-        count++;
+    
+        drawPolygon();
+        console.log("polygon");
+    } else {
+        if (count==0){
+            isDrawing = true;
+            startX = event.offsetX;
+            startY = event.offsetY;
+            endX = event.offsetX;
+            endY = event.offsetY;
+            if (currentShapeType === "line") {
+                drawShape(gl, startX, startY, endX, endY, "line");
+                console.log("line");
+            }
+            else if (currentShapeType === "square") {
+                drawShape(gl, startX, startY, endX, endY, "square");
+                console.log("square");
+            } 
+            else if (currentShapeType === "rectangle") {
+                drawShape(gl, startX, startY, endX, endY, "rectangle");
+                console.log("rectangle");
+            }
+            count++;
+        }
     }
 }
 
@@ -97,6 +120,8 @@ function handleMouseMove(event){
         return;
     
     }
+
+    
 }
 
 function handleMouseUp(event, shapeType){
@@ -257,4 +282,45 @@ function loadJson(){
         }
     }
     input.click();
+}
+
+
+function convexHull(points) {
+    if (points.length < 3) return [];
+
+    let hull = [];
+
+    let leftMost = 0;
+    for (let i = 1; i < points.length; i++) {
+        if (points[i][0] < points[leftMost][0]) {
+            leftMost = i;
+        }
+    }
+
+    let p = leftMost;
+    let q;
+
+    do {
+        hull.push(points[p]);
+        q = (p + 1) % points.length;
+
+        for (let i = 0; i < points.length; i++) {
+            if (orientation(points[p], points[i], points[q]) == 2) {
+                q = i;
+            }
+        }
+
+        p = q;
+
+    } while (p != leftMost);
+
+    return hull;
+}
+
+function orientation(p, q, r) {
+    let val = (q[1] - p[1]) * (r[0] - q[0]) -
+              (q[0] - p[0]) * (r[1] - q[1]);
+
+    if (val == 0) return 0;
+    return (val > 0)? 1: 2; 
 }

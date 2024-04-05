@@ -32,4 +32,18 @@ rectangleButton.addEventListener('click', function() {
     canvas.addEventListener('mousedown', (event) => handleMouseDown(event, "square"));
     canvas.addEventListener('mousemove', (event) => handleMouseMove(event));
     canvas.addEventListener('mouseup', (event) => handleMouseUp(event, "square"));
+
 });
+
+polygonButton.addEventListener('click', function() {
+    isDrawing = false;
+    count=0;
+    canvas.removeEventListener('mousedown', handleMouseDown);
+    canvas.removeEventListener('mousemove', handleMouseMove);
+    canvas.removeEventListener('mouseup', handleMouseUp);
+    currentShapeType = "polygon";
+    canvas.addEventListener('mousedown', (event) => handleMouseDown(event, "polygon"));
+    canvas.addEventListener('mousemove', (event) => handleMouseMove(event));
+    canvas.addEventListener('mouseup', (event) => handleMouseUp(event, "polygon"));
+}
+);
